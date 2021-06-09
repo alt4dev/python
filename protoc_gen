@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Pull the repo
+git pull https://github.com/alt4dev/protobuff --depth 1
+cd protobuff || return
+
+./build.sh python ../alt4/proto
+
+# Remove the repo
+cd ../
+rm -r protobuff
