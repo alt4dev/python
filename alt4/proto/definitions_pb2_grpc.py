@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import definitions_pb2 as definitions__pb2
+from alt4.proto import definitions_pb2 as definitions__pb2
 
 
 class LoggingStub(object):
