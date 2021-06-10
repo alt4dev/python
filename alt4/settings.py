@@ -28,6 +28,16 @@ def get_mode():
     return get_mode()
 
 
+def should_emmit():
+    mode = get_mode()
+    return mode == MODE_DEBUG or mode == MODE_TESTING
+
+
+def skip_remote():
+    mode = get_mode()
+    return mode == MODE_TESTING or mode == MODE_SILENT
+
+
 def set_source(source=None):
     if not source:
         # Get the mode from environment variable
