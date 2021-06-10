@@ -1,11 +1,19 @@
 #!/bin/sh
 
 # Pull the repo
-git pull https://github.com/alt4dev/protobuff --depth 1
-cd protobuff || return
+WORKDIR=$(realpath .)
+mkdir /tmp/alt4temp
+cd /tmp/alt4temp || return
 
-./build.sh python ../alt4/proto
+# TODO: Change to use tags instead
+wget https://github.com/alt4dev/protobuff/archive/refs/heads/master.zip
+unzip master.zip
+cd protobuff-master || return
 
-# Remove the repo
-cd ../
-rm -r protobuff
+./build.sh python "$WORKDIR/alt4/proto"
+
+rm -r /tmp/alt4temp
+
+git add alt4/proto
+
+echo "Commit the changes if any."
