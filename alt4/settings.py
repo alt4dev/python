@@ -1,4 +1,5 @@
 import os
+from alt4.exceptions import MissingTokenException
 global MODE
 global SOURCE
 global AUTH_TOKEN
@@ -48,7 +49,7 @@ def set_auth_token(auth_token=None):
         # Get the mode from environment variable
         auth_token = os.environ.get("ALT4_AUTH_TOKEN", None)
     if not auth_token:
-        raise Exception("Invalid auth token provided")
+        raise MissingTokenException("Invalid auth token provided")
     global AUTH_TOKEN
     AUTH_TOKEN = auth_token
 
