@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 from alt4.writer import write_log
 from alt4.settings import should_emmit
-from alt4.grouping import close_group, open_group
+from alt4.grouping import close_group as native_close, open_group as native_open
 from alt4.proto.definitions_pb2 import Log
 
 
@@ -49,16 +49,57 @@ class Logger:
         self._log(Log.Level.INFO, False, message, *args, **kwargs)
 
     def open_group(self, message, *args, **kwargs):
-        open_group()
+        native_open()
         if should_emmit():
             logging.info(message)
         self._log(Log.Level.NONE, True, message, *args, **kwargs)
 
     def close_group(self, *args, **kwargs):
         if args:
-            message = args[0]
+            message = str(args[0])
             args = args[1:]
             if should_emmit():
                 logging.info(message)
             self._log(Log.Level.NONE, True, message, *args, **kwargs)
-        close_group()
+        native_close()
+
+
+global __default_logger
+
+
+def get_default_logger():
+    global __default_logger
+    if "__default_logger" in globals():
+        return __default_logger
+    __default_logger = Logger()
+    __default_logger.call_depth += 1
+    return __default_logger
+
+
+def warning(message, *args, **kwargs):
+    get_default_logger().warning(message, *args, **kwargs)
+
+
+def debug(message, *args, **kwargs):
+    get_default_logger().debug(message, *args, **kwargs)
+
+
+def info(message, *args, **kwargs):
+    get_default_logger().info(message, *args, **kwargs)
+
+
+def error(message, *args, **kwargs):
+    get_default_logger().error(message, *args, **kwargs)
+
+
+def fatal(message, *args, **kwargs):
+    get_default_logger().fatal(message, *args, **kwargs)
+
+
+def open_group(message, *args, **kwargs):
+    get_default_logger().open_group(message, *args, **kwargs)
+
+
+def close_group(*args, **kwargs):
+    get_default_logger().close_group(*args, **kwargs)
+
