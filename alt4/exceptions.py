@@ -1,3 +1,3 @@
 class MissingTokenException(Exception):
     def __init__(self, message):
-        super(message)
+        super().__init__(message)
